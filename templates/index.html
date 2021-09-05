@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Тестовое задание</title>
+    
+    <style type="text/css">
+        table {
+            width: 1200px; 
+            border-collapse: collapse; 
+            margin-left: 10px;
+            margin-right: 10px;
+        } 
+        table td, th {
+            padding: 8px;
+            border: 1px solid black;
+        }
+        table tbody tr:hover {
+            background: #e8f6ff;
+        }
+        .box {
+            width: 200px;
+            height: 30px;
+            border: 1px solid #999;
+            font-size: 16px;
+            color: #000000;
+            background-color: #eee;
+            border-radius: 5px;
+            box-shadow: 4px 4px #ccc;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            margin-left: 30px;
+        }
+    </style>
+
+    <script>
+        function searchInTable() {
+            var filterValue = document.getElementById('filter').value;
+            var searchText = document.getElementById('search-field').value;
+            var table = document.getElementById('posts-table');
+            var regSearchText = new RegExp(searchText, 'i');
+            var isMatch = false;
+                for (var i = 1; i < table.rows.length; i++) {
+                    isMatch = false;
+                    switch (filterValue) {
+                        case "all":
+                            for (var j = table.rows[i].cells.length - 1; j >= 0; j--) {
+                                isMatch = regSearchText.test(table.rows[i].cells[j].innerHTML);
+                                if (isMatch) break;
+                            }
+                            break;
+                        case "name":
+                        isMatch = regSearchText.test(table.rows[i].cells[0].innerHTML);
+                            if (isMatch) break;
+                            break;
+                        case "title":
+                        isMatch = regSearchText.test(table.rows[i].cells[1].innerHTML);
+                            if (isMatch) break;
+                            break;
+                        case "body":
+                        isMatch = regSearchText.test(table.rows[i].cells[2].innerHTML);
+                            if (isMatch) break;
+                            break;
+                        default:
+                            console.log( "Неизвестное значение" );
+                        }
+                    if (isMatch) {
+                        table.rows[i].style.display = "";
+                    } else {
+                        table.rows[i].style.display = "none";
+                    }
+
+                }
+        }
+    </script>
+
+</head>
+<body>
+    <input type="text" id="search-field" class = "box" onkeyup="searchInTable()" placeholder="Поиск...">
+    
+    <select id="filter" class = "box">
+        <option value="all">Все столбцы</option>
+            
+        <option value="name">Имя пользователя</option>
+            
+        <option value="title">Тема поста</option>
+            
+        <option value="body">Текст поста</option>       
+    </select>
+        
+    <table id="posts-table">
+        <tbody>
+          <tr>
+            <th>Имя пользователя</th>
+            <th>Тема поста</th>
+            <th>Текст поста</th>
+          </tr>
+          {% for user in users %}
+            {% for post in posts %}
+                {% if user.id == post.userId %}
+                    <tr>
+                        <td>{{ user.name }}</td>
+                        <td>{{ post.title }}</td>
+                        <td>{{ post.body }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+          {% endfor %}
+        </tbody>
+      </table>
+</body>
+</html>
